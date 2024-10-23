@@ -25,3 +25,6 @@ if __name__ == "__main__":
         print("Secret key is found!")
     else:
         print("No secret key found.")
+
+
+# Updated code
