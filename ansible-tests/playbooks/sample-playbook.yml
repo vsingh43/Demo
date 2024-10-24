@@ -1,0 +1,8 @@
+# sample-playbook.yml
+---
+- name: Sample Playbook
+  hosts: localhost
+  tasks:
+    - name: Display a message
+      debug:
+        msg: "Hello, World!"
