@@ -9,43 +9,41 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
 
     steps:
-      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
-      # Step 2: Set up Python
+
       - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      # Step 3: Install Python and YAML dependencies
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pylint bandit pytest yamllint detect-secrets pykwalify
-      # Step 4: Lint Python Code
+
       - name: Lint Python Code using Pylint
         run: |
           pylint $(find . -name "*.py")
-      # Step 5: Run Security Checks on Python Code using Bandit
+
       - name: Run Bandit Security Checks
         run: |
           bandit -r $(find . -name "*.py")
-      # Step 6: Run Unit Tests for Python Code using Pytest
+
       - name: Run Unit Tests using Pytest
         run: |
           pytest
-      # Step 7: Lint YAML Files using Yamllint
+
       - name: Lint YAML Files using Yamllint
         run: |
           yamllint $(find . -name "*.yml")
-      # Step 8: Validate YAML Schema using Pykwalify (Optional)
+
       - name: Validate YAML Files against Schema (if needed)
         run: |
           pykwalify -d your_yaml_file.yml -s your_schema_file.yml
-      # Step 9: Scan for Secrets in Python and YAML Files
+
       - name: Scan for Secrets
         run: |
           detect-secrets scan
