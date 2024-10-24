@@ -2,3 +2,5 @@ pytest
 pyyaml
 ansible
 pytest-benchmark
+pre-commit
+detect-secrets
