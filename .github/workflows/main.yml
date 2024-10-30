@@ -1,5 +1,5 @@
 name: CI Workflow
-
+ 
 on:
   push:
     branches:
@@ -7,39 +7,51 @@ on:
   pull_request:
     branches:
       - master
-
+ 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
+    runs-on:
+      group: netdevops
+ 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
+ 
+    # Step to check and print OS details
     - name: Print OS details
+      run: uname -a
+ 
+    # Install python3-venv if needed
+    - name: Install Python venv package
       run: |
-        uname -a 
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
+        sudo apt-get update
+        sudo apt-get install -y python3-venv
+ 
+    # Step 1: Create and activate virtual environment without sudo
     - name: Create and activate virtual environment
       run: |
-        python -m venv venv
+        python3 -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
-
-    - name: Set PYTHONPATH
+ 
+    # Verify Python Environment
+    - name: Verify Python Environment
       run: |
-        echo "PYTHONPATH=$PYTHONPATH:$(pwd)/modules" >> $GITHUB_ENV
-
+        source venv/bin/activate
+        python --version
+        pip list
+ 
+    # Step 2: Set PYTHONPATH
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/modules" >> $GITHUB_ENV
+ 
+    # Step 3: Install dependencies within the virtual environment
     - name: Install dependencies
       run: |
         source venv/bin/activate
         pip install -r requirements.txt
-
+ 
+    # Step 4: Run Python tests within the virtual environment
     - name: Run Python tests
       run: |
         source venv/bin/activate
